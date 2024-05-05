@@ -36,5 +36,10 @@
     "ghost-storage-base": "^1.0.0",
     "minio": "^8.0.0",
     "sanitize-filename": "^1.6.3"
+  },
+  "resolutions": {
+
+    "moment": "^2.30.1"
+
   }
 }
