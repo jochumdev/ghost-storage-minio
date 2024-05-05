@@ -12,6 +12,7 @@ pushd content/adapters/storage/
 git clone https://github.com/jochumdev/ghost-storage-minio.git
 cd ghost-storage-minio
 npm install
+popd
 ```
 
 ## Usage
