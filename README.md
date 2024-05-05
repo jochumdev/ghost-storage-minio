@@ -4,17 +4,30 @@ Use Minio (an AWS S3 compatible self-hosted storage service) as an image store f
 
 _Please note that this hasn't been fully tested, I'd welcome any type of contributions to improve the codebase._
 
+## Install
+
+```bash
+mkdir -p content/adapters/storage/
+pushd content/adapters/storage/
+git clone https://github.com/jochumdev/ghost-storage-minio.git
+cd ghost-storage-minio
+npm install
+```
+
+## Usage
+
 A huge thanks to Colin Meinke for having his [S3 Adapter](https://github.com/colinmeinke/ghost-storage-adapter-s3) on GitHub for me to adapt my code from.
 
 _In the following configuration examples, do not include 'http' or 'https' as part of your endPoint, the script takes care of that._
 
 To configure, set the following config variables in your `config.{environment}.json` file:
 
+
 ```javascript
 {
   "storage": {
-    "active": "minio",
-    "minio": {
+    "active": "ghost-storage-minio",
+    "ghost-storage-minio": {
       'accessKey': 'minio-access-key',
       'secretKey': 'minio-secret-key',
       'bucket': 'my-bucket',
@@ -49,3 +62,12 @@ environment:
   storage__minio__port: 9000 (optional)
   storage__minio__useSSL: "true" (optional, but quoted because docker-compose yelled at me)
 ```
+
+## Authors
+
+- Forked from [@kittizz](https://github.com/kittizz/ghost-minio/)
+- [@jochumdev](https://github.com/jochumdev)
+
+## License
+
+BSD 2-Clause
