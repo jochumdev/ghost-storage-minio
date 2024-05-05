@@ -1,8 +1,8 @@
-import StorageBase from 'ghost-storage-base'
-import path, { join } from 'path'
-import { readFile } from 'fs'
-const Minio = require('minio')
-const sanitizeFilename = require('sanitize-filename')
+const StorageBase = require('ghost-storage-base');
+const path = require('path');
+const Minio = require('minio');
+const sanitizeFilename = require('sanitize-filename');
+const { readFile } = require('fs');
 const readFileAsync = fp => new Promise((resolve, reject) => readFile(fp, (err, data) => err ? reject(err) : resolve(data)))
 
 class Store extends StorageBase {
@@ -18,8 +18,10 @@ class Store extends StorageBase {
       bucket
     } = config
 
+    this.config = config;
+   
     this.endpoint = process.env.storage__minio__endPoint || endpoint || ''
-    this.port = process.env.storage__minio__port+'' || port+'' || ''
+    this.port = process.env.storage__minio__port || port || ''
 
     if(process.env.storage__minio__useSSL && ['0', 'false'].includes(process.env.storage__minio__useSSL)){
       this.useSSL = false
@@ -59,6 +61,7 @@ class Store extends StorageBase {
   minioClient() {
     let configs = {
       endPoint: this.endpoint,
+      port: this.port,
       useSSL: this.useSSL,
       accessKey: this.accessKey,
       secretKey: this.secretKey
@@ -88,7 +91,7 @@ class Store extends StorageBase {
 
     return new Promise((resolve, reject) => {
       this.minioClient()
-        .statObject(_self.bucket, join(directory, fileName), (err, stat) => {
+        .statObject(_self.bucket, path.join(directory, fileName), (err, stat) => {
           if (err) {
             resolve(false)
           }
@@ -109,6 +112,11 @@ class Store extends StorageBase {
     const directory = targetDir || this.getTargetDir(this.pathPrefix)
     let _self = this
    
+    let metaData = {
+      'Cache-Control': `max-age=${30 * 24 * 60 * 60}`,
+      'Content-Type': fileObject.type,
+    }
+
     return new Promise((resolve, reject) => {
       Promise.all([
         readFileAsync(fileObject.path)
@@ -116,7 +124,7 @@ class Store extends StorageBase {
         this.getUniqueFileName(fileObject, directory).then((fileName) => {
           let fileParse  = path.parse(fileName)
           _self.minioClient()
-            .putObject(_self.bucket, fileName, fileStream, fileObject.size, (err, etag) => {
+            .putObject(_self.bucket, fileName, fileStream, fileObject.size, metaData, (err, etag) => {
               if (err) {
                 reject(err)
               }
@@ -144,7 +152,7 @@ class Store extends StorageBase {
     return function customServe(req, res, next) {
       const size = 0
       this.minioClient()
-        .getObject(_self.bucket, join(directory, fileName), (err, stream) => {
+        .getObject(_self.bucket, path.join(directory, fileName), (err, stream) => {
           if (err) {
             next(err)
           }
@@ -175,7 +183,7 @@ class Store extends StorageBase {
 
     return new Promise((resolve, reject) => {
       this.minioClient()
-        .removeObject(_self.bucket, join(directory, fileName), (err) => {
+        .removeObject(_self.bucket, path.join(directory, fileName), (err) => {
           if (err) {
             reject(err)
           }
@@ -198,7 +206,7 @@ class Store extends StorageBase {
     return new Promise((resolve, reject) => {
       const size = 0
       this.minioClient()
-        .getObject(_self.bucket, join(directory, fileName), (err, stream) => {
+        .getObject(_self.bucket, path.join(directory, fileName), (err, stream) => {
           if (err) {
             reject(err)
           }
@@ -222,4 +230,4 @@ class Store extends StorageBase {
   }
 }
 
-export default Store
+module.exports = Store;

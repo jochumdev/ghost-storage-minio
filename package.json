@@ -29,39 +29,17 @@
   "homepage": "https://github.com/captbrogers/ghost-minio",
   "main": "index.js",
   "scripts": {
-    "build": "babel ./src/index.js --out-file ./index.js",
-    "prepublish": "npm run build",
     "semantic-release": "semantic-release",
     "test": "exit 0"
   },
   "dependencies": {
-    "ghost-storage-base": "0.0.3",
-    "minio": "^7.0.12",
+    "ghost-storage-base": "^0.0.3",
+    "minio": "^8.0.0",
     "sanitize-filename": "^1.6.3"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-plugin-add-module-exports": "^1.0.2",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.7.0"
-  },
-  "babel": {
-    "plugins": [
-      "transform-object-rest-spread",
-      "add-module-exports"
-    ],
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "node": "8.9"
-          },
-          "exclude": [
-            "transform-es2015-classes"
-          ]
-        }
-      ]
-    ]
+    "@babel/cli": "^7.24.5",
+    "@babel/preset-env": "^7.24.5",
+    "@babel/plugin-transform-modules-commonjs": "^7.24.5"
   }
 }
