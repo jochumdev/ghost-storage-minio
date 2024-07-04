@@ -33,13 +33,11 @@
     "test": "exit 0"
   },
   "dependencies": {
-    "ghost-storage-base": "^1.0.0",
+    "ghost-storage-base": "^0.0.3",
     "minio": "^8.0.0",
     "sanitize-filename": "^1.6.3"
   },
   "resolutions": {
-
     "moment": "^2.30.1"
-
   }
 }
